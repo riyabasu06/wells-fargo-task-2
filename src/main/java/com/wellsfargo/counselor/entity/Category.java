@@ -1,14 +1,15 @@
 package com.wellsfargo.counselor.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
-public class Product {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,18 +18,20 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private double price;
+    // One category can have multiple products
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
-    @ManyToOne
-    private Category category;
-
-    public Product(String name, double price, Category category) {
-        this.name = name;
-        this.price = price;
-        this.category = category;
+    // Default constructor for JPA
+    protected Category() {
     }
 
+    // Constructor with parameters
+    public Category(String name) {
+        this.name = name;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -41,19 +44,11 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }
